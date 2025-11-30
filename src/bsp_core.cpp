@@ -1,41 +1,96 @@
 #include "bsp_core.h"
 #include <iostream>
-#include <algorithm>
+#include <limits>
 
-BSPNode* buildBSPTree(const std::vector<Point>& points, 
-                      int depth, int maxDepth, int threshold) {
-    std::cout << "TODO: Implement buildBSPTree" << std::endl;
-    // For now, just create a leaf with all points
-    BSPNode* leaf = new BSPNode();
-    leaf->isLeaf = true;
-    leaf->points = points;
-    return leaf;
+using namespace std;
+
+BSPNode *buildBSPTree(const vector<Point> &points,
+                      int depth, int maxDepth, int threshold)
+{
+    // cout << "TODO: Implement buildBSPTree" << endl;
+
+    // Check stopping criteria (depth, point count)
+    if (points.size() <= threshold || depth >= maxDepth)
+    {
+        BSPNode *leaf = new BSPNode();
+        leaf->isLeaf = true;
+        leaf->points = points;
+        return leaf;
+    }
+
+    // Choose partition line using choosePartition()
+    double a, b, c;
+    choosePartition(points, depth, a, b, c);
+    // Split points using splitPoints()
+    vector<Point> left, right;
+    splitPoints(points, a, b, c, left, right);
+    // Recursively build left and right subtrees
+    BSPNode *node = new BSPNode();
+    node->isLeaf = false;
+    node->a = a;
+    node->b = b;
+    node->c = c;
+    node->left = buildBSPTree(left, depth + 1, maxDepth, threshold);
+    node->right = buildBSPTree(right, depth + 1, maxDepth, threshold);
+    return node;
 }
 
-void choosePartition(const std::vector<Point>& points, int depth,
-                     double& a, double& b, double& c) {
-    std::cout << "TODO: Implement choosePartition" << std::endl;
-    // Default: vertical split at x=0
-    // Strategy should be:
-    // - Even depth: split on X axis (vertical line)
+void choosePartition(const vector<Point> &points, int depth,
+                     double &a, double &b, double &c)
+{
+    // cout << "TODO: Implement choosePartition" << endl;
+    double mean, max = -numeric_limits<double>::infinity(), min = numeric_limits<double>::infinity();
     // - Odd depth: split on Y axis (horizontal line)
-    // - Use median value for split position
-    a = 1.0; 
-    b = 0.0; 
-    c = 0.0;
+    if (depth % 2)
+    { // false = 0 = even, true = 1 = odd
+        // get mean of range
+        for (const Point &p : points)
+        {
+            if (p.y > max)
+                max = p.y;
+            else if (p.y < min)
+                min = p.y;
+        }
+        mean = (max + min) / 2;
+        a = 0;
+        b = 1;
+    }
+    // - Even depth: split on X axis (vertical line)
+    else
+    {
+        // get mean of range
+        for (const Point &p : points)
+        {
+            if (p.x > max)
+                max = p.x;
+            else if (p.x < min)
+                min = p.x;
+        }
+        mean = (max + min) / 2;
+        a = 1;
+        b = 0;
+    }
+    c = -mean;
 }
 
-bool isLeftOf(const Point& p, double a, double b, double c) {
+bool isLeftOf(const Point &p, double a, double b, double c)
+{
     // This function is complete - it's the mathematical definition
     return (a * p.x + b * p.y + c) <= 0;
 }
 
-void splitPoints(const std::vector<Point>& points,
+void splitPoints(const vector<Point> &points,
                  double a, double b, double c,
-                 std::vector<Point>& leftPoints,
-                 std::vector<Point>& rightPoints) {
-    std::cout << "TODO: Implement splitPoints" << std::endl;
+                 vector<Point> &leftPoints,
+                 vector<Point> &rightPoints)
+{
+    // cout << "TODO: Implement splitPoints" << endl;
     // Should use isLeftOf() to classify each point
-    // For now, just put all points in left
-    leftPoints = points;
+    for (const Point &p : points)
+    {
+        if (isLeftOf(p, a, b, c))
+            leftPoints.push_back(p);
+        else
+            rightPoints.push_back(p);
+    }
 }
