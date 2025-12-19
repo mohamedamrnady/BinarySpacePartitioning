@@ -1,4 +1,4 @@
-#include "bsp_visualize.h"
+#include "../include/bsp_visualize.h"
 #include <iostream>
 #include <vector>
 #include <algorithm>
