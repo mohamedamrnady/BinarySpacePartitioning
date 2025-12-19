@@ -1,4 +1,4 @@
-#include "BSPNode.h"
+#include "../include/BSPNode.h"
 
 BSPNode::BSPNode() : a(0.0), b(0.0), c(0.0), left(nullptr), right(nullptr), isLeaf(false) {}
 

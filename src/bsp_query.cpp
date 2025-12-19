@@ -1,5 +1,5 @@
-#include "bsp_query.h"
-#include "bsp_core.h"
+#include "../include/bsp_query.h"
+#include "../include/bsp_core.h"
 #include <iostream>
 #include <algorithm> // for std::max
 

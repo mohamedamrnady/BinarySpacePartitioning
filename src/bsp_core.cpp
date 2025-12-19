@@ -1,5 +1,4 @@
-#include "bsp_core.h"
-#include <iostream>
+#include "../include/bsp_core.h"
 #include <limits>
 
 using namespace std;
@@ -7,8 +6,10 @@ using namespace std;
 BSPNode *buildBSPTree(const vector<Point> &points,
                       int depth, int maxDepth, int threshold)
 {
-    // check stopping criteria (depth, point count)
-    if (points.size() <= threshold || depth >= maxDepth)
+    // cout << "TODO: Implement buildBSPTree" << endl;
+
+    // Check stopping criteria (depth, point count)
+    if (points.size() <= static_cast<unsigned long>(threshold) || depth >= maxDepth)
     {
         BSPNode *leaf = new BSPNode();
         leaf->isLeaf = true;
