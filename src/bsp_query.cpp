@@ -1,67 +1,93 @@
 #include "bsp_query.h"
 #include "bsp_core.h"
 #include <iostream>
-#include <algorithm>
+#include <algorithm> // for std::max
 
 BSPNode *findPartition(const Point &queryPoint, BSPNode *root)
 {
-    std::cout << "TODO: Implement findPartition" << std::endl;
+    if (!root)
+        return nullptr; // Empty tree
+    if (root->isLeaf)
+        return root; // Leaf node
 
-    return root;
+    // Recurse into left or right subtree
+    if (isLeftOf(queryPoint, root->a, root->b, root->c))
+    {
+        return findPartition(queryPoint, root->left);
+    }
+    else
+    {
+        return findPartition(queryPoint, root->right);
+    }
 }
 
 int countNodes(BSPNode *root)
 {
-    std::cout << "TODO: Implement countNodes" << std::endl;
-
-    if (root == nullptr)
+    if (!root)
         return 0;
-    return 1;
+    return 1 + countNodes(root->left) + countNodes(root->right);
 }
 
 int countLeaves(BSPNode *root)
 {
-    std::cout << "TODO: Implement countLeaves" << std::endl;
-
-    if (root == nullptr)
+    if (!root)
         return 0;
     if (root->isLeaf)
         return 1;
-    return 0;
+    return countLeaves(root->left) + countLeaves(root->right);
 }
 
 int getTreeDepth(BSPNode *root)
 {
-    std::cout << "TODO: Implement getTreeDepth" << std::endl;
-
-    if (root == nullptr)
+    if (!root)
         return 0;
-    return 1;
+    int leftDepth = getTreeDepth(root->left);
+    int rightDepth = getTreeDepth(root->right);
+    return 1 + std::max(leftDepth, rightDepth);
 }
 
 void printTree(BSPNode *root, int indent)
 {
-    std::cout << "TODO: Implement printTree" << std::endl;
-
-    if (root == nullptr)
+    if (!root)
         return;
 
-    for (int i = 0; i < indent; i++)
-        std::cout << "  ";
+    std::string spacer(indent * 2, ' ');
+
     if (root->isLeaf)
     {
-        std::cout << "Leaf: " << root->points.size() << " points" << std::endl;
+        std::cout << spacer << "Leaf node: " << root->points.size() << " points\n";
+        return;
     }
-    else
-    {
-        std::cout << "Node: partition line " << root->a << "x + "
-                  << root->b << "y + " << root->c << " = 0" << std::endl;
-    }
+
+    // Internal node: show partition line
+    std::cout << spacer << "Node: "
+              << root->a << "x + " << root->b << "y + " << root->c << " = 0\n";
+
+    // Recurse into children
+    printTree(root->left, indent + 1);
+    printTree(root->right, indent + 1);
 }
 
 bool verifyAllPoints(BSPNode *root, const std::vector<Point> &points)
 {
-    std::cout << "TODO: Implement verifyAllPoints" << std::endl;
+    for (const Point &p : points)
+    {
+        BSPNode *leaf = findPartition(p, root);
+        if (!leaf)
+            return false;
 
+        // Check if point is actually in leaf's point vector
+        bool found = false;
+        for (const Point &lp : leaf->points)
+        {
+            if (lp.x == p.x && lp.y == p.y)
+            {
+                found = true;
+                break;
+            }
+        }
+        if (!found)
+            return false;
+    }
     return true;
 }
