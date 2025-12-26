@@ -140,6 +140,10 @@ void visualizeGUI(QCustomPlot *graphPlot, BSPNode *root,
     double smallestX = 0;
     double smallestY = 0;
 
+    graphPlot->clearItems();
+    graphPlot->addGraph();
+    graphPlot->graph(0)->data()->clear();
+
     for (size_t i = 0; i < points.size(); ++i)
     {
         if (points[i].x > greatestX)
@@ -232,6 +236,70 @@ void visualizeGUI(QCustomPlot *graphPlot, BSPNode *root,
     graphPlot->replot();
 }
 
+void printPartitionLines(BSPNode *root)
+{
+    // Should:
+    // 1. Traverse tree (pre-order or in-order)
+    // 2. For each internal node, print partition line equation
+    // 3. Format: "ax + by + c = 0" or more readable format
+    //    e.g., "x = 5.0" for vertical lines, "y = 3.0" for horizontal
+    // 1. Handle empty tree
+    if (root == nullptr)
+        return;
+    // 2. If this is an internal node, print its partition line
+    if (!root->isLeaf)
+    {
+        std::cout << "Partition: "
+                  << root->a << "x + "
+                  << root->b << "y + "
+                  << root->c << " = 0";
+
+        // 3. Print a more readable form
+        if (root->a == 1.0 && root->b == 0.0)
+        {
+            std::cout << " (vertical line: x = " << -root->c << ")";
+        }
+        else if (root->a == 0.0 && root->b == 1.0)
+        {
+            std::cout << " (horizontal line: y = " << -root->c << ")";
+        }
+        std::cout << std::endl;
+    }
+    // 4. Traverse left and right subtrees
+    printPartitionLines(root->left);
+    printPartitionLines(root->right);
+}
+
+void printPartitionLinesGUI(QTextEdit *graphLabel, BSPNode *root)
+{
+    // Should:
+    // 1. Traverse tree (pre-order or in-order)
+    // 2. For each internal node, print partition line equation
+    // 3. Format: "ax + by + c = 0" or more readable format
+    //    e.g., "x = 5.0" for vertical lines, "y = 3.0" for horizontal
+    // 1. Handle empty tree
+
+    if (root == nullptr)
+        return;
+    // 2. If this is an internal node, print its partition line
+    if (!root->isLeaf)
+    {
+        graphLabel->setPlainText(graphLabel->toPlainText() + "Partition: " + QString::number(root->a) + "x + " + QString::number(root->b) + "y + " + QString::number(root->c) + " = 0\n");
+
+        // 3. Print a more readable form
+        if (root->a == 1.0 && root->b == 0.0)
+        {
+            graphLabel->setPlainText(graphLabel->toPlainText() + " (vertical line: x = " + QString::number(-root->c) + ")\n");
+        }
+        else if (root->a == 0.0 && root->b == 1.0)
+        {
+            graphLabel->setPlainText(graphLabel->toPlainText() + " (horizontal line: y = " + QString::number(-root->c) + ")\n");
+        }
+    }
+    // 4. Traverse left and right subtrees
+    printPartitionLinesGUI(graphLabel, root->left);
+    printPartitionLinesGUI(graphLabel, root->right);
+}
 //!!!!!!!!!!!!!!IMPORTANT!!!!!!!!!!!!!!
 /*
 For main program implementer (Entry Point), I suggest a small function to print the grid size and points of the problem so it's easier to visualize or inspect.

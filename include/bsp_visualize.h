@@ -13,6 +13,12 @@ void visualizeASCII(BSPNode *root,
 
 void printPartitionLines(BSPNode *root);
 
+/**
+ * Print partition lines in readable format.
+ *
+ * @param root Root of BSP tree
+ */
+void printPartitionLinesGUI(QTextEdit *graphLabel, BSPNode* root);
 
 /**
  * Print ASCII grid showing partitions.

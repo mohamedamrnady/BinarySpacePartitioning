@@ -27,13 +27,11 @@ public:
 private:
     Ui::MainWindow *ui;
     QCustomPlot *graphPlot;
+    QTextEdit *graphLabel;
     QPushButton *home;
-    QPushButton *graphPoints;
 
 private slots:
     void on_home_clicked();
     void on_pickFile_clicked();
-    void on_graphPoints_clicked();
-    void on_pickPoints_clicked();
 };
 #endif // MAINWINDOW_H
