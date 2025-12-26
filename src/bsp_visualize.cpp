@@ -165,33 +165,6 @@ void visualizeGUI(QCustomPlot *graphPlot, BSPNode *root,
         graphPlot->graph(0)->addData(points[i].x, points[i].y);
     }
 
-    int plotSize = greatestX > greatestY ? greatestX : greatestY;
-
-    // Helper lambdas
-    auto clampInt = [&](int v, int lo, int hi)
-    {
-        if (v < lo)
-            return lo;
-        if (v > hi)
-            return hi;
-        return v;
-    };
-
-    auto mapXToCol = [&](double x)
-    {
-        double t = (x - smallestX) / (greatestX - smallestX);
-        int col = (int)(t * (plotSize - 1) + 0.5);
-        return clampInt(col, 0, plotSize - 1);
-    };
-
-    auto mapYToRow = [&](double y)
-    {
-        double t = (y - smallestY) / (greatestY - smallestY);
-        int rowFromBottom = (int)(t * (plotSize - 1) + 0.5);
-        int row = (plotSize - 1) - rowFromBottom;
-        return clampInt(row, 0, plotSize - 1);
-    };
-
     // 3. Draw partition lines on grid (single symbol for consistency)
     std::vector<BSPNode *> stack;
     stack.push_back(root);
@@ -210,16 +183,14 @@ void visualizeGUI(QCustomPlot *graphPlot, BSPNode *root,
             if (node->a == 1.0 && node->b == 0.0)
             {
                 // Vertical split: x = -c
-                int col = mapXToCol(-node->c);
-                infLine->point1->setCoords(1.5 * greatestX, col);  // e.g., (2, 0)
-                infLine->point2->setCoords(-1.5 * greatestX, col); // e.g., (2, 1)
+                infLine->point1->setCoords(-node->c, greatestX); // e.g., (2, 0)
+                infLine->point2->setCoords(-node->c, smallestX); // e.g., (2, 1)
             }
             else if (node->a == 0.0 && node->b == 1.0)
             {
                 // Horizontal split: y = -c
-                int row = mapYToRow(-node->c);
-                infLine->point1->setCoords(row, 1.5 * greatestY);  // e.g., (2, 0)
-                infLine->point2->setCoords(row, -1.5 * greatestY); // e.g., (2, 1)
+                infLine->point1->setCoords(greatestY, -node->c); // e.g., (2, 0)
+                infLine->point2->setCoords(smallestY, -node->c); // e.g., (2, 1)
             }
         }
 
