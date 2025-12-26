@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <cmath>
+#include <algorithm> // for std::find
 
 std::vector<Point> readPointsFromFile(const std::string &filename)
 {
