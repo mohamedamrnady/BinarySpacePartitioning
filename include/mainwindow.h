@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "qcustomplot.h"
 #include <QMainWindow>
 #include <QPushButton>
 #include <QFileDialog>
@@ -25,6 +26,9 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    QCustomPlot *graphPlot;
+    QPushButton *home;
+    QPushButton *graphPoints;
 
 private slots:
     void on_home_clicked();
