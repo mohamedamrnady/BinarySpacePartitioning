@@ -75,3 +75,37 @@ void MainWindow::on_home_clicked() {
     ui->statusbar->hide();
     ui->stackedWidget->setCurrentIndex(0);
 }
+
+void MainWindow::on_randomPoints_clicked() {
+    static bool seedInitialized = false;
+    if (!seedInitialized)
+    {
+        srand(static_cast<unsigned>(time(nullptr)));
+        seedInitialized = true;
+    }
+
+    int count = std::rand() % (20 - 0 + 1) + 0;
+    double minX = ((double)std::rand() / RAND_MAX) * (100.0 - 0.0);
+    double maxX = 0.0;
+    double minY = ((double)std::rand() / RAND_MAX) * (100.0 - 0.0);
+    double maxY = 0.0;
+
+    while (maxX <= minX) {
+        maxX = ((double)std::rand() / RAND_MAX) * (200.0 - 0.0);
+    }
+    while (maxY <= minY) {
+        maxY = ((double)std::rand() / RAND_MAX) * (200.0 - 0.0);
+    }
+
+    std::vector<Point> points = generateRandomPoints(count, minX, maxX, minY, maxY);
+    BSPNode* root = buildBSPTree(points);
+
+    graphLabel->setPlainText("");
+    printPartitionLinesGUI(graphLabel, root);
+    visualizeGUI(graphPlot, root, points);
+
+    qDebug() << "Changing Screen";
+    ui->stackedWidget->setCurrentIndex(1);
+    ui->statusbar->show();
+
+}
