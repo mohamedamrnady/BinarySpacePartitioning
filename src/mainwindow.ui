@@ -14,28 +14,59 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="pushButton">
-    <property name="geometry">
-     <rect>
-      <x>350</x>
-      <y>480</y>
-      <width>100</width>
-      <height>32</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>PushButton</string>
-    </property>
-   </widget>
-   <widget class="QCustomPlot" name="widget" native="true">
+   <widget class="QStackedWidget" name="stackedWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>90</y>
+      <y>0</y>
       <width>781</width>
-      <height>351</height>
+      <height>531</height>
      </rect>
     </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="home">
+     <widget class="QPushButton" name="pickFile">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>190</y>
+        <width>230</width>
+        <height>110</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Pick Plot Points File</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pickPoints">
+      <property name="geometry">
+       <rect>
+        <x>400</x>
+        <y>190</y>
+        <width>230</width>
+        <height>110</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Define Plot Points</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="graph">
+     <widget class="QCustomPlot" name="graphPlot" native="true">
+      <property name="geometry">
+       <rect>
+        <x>-1</x>
+        <y>-1</y>
+        <width>781</width>
+        <height>531</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="pointsPicker"/>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

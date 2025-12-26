@@ -2,6 +2,12 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QPushButton>
+#include <QFileDialog>
+#include <QString>
+#include <QDebug> // For console output
+#include <QFile> // For file operations
+#include <QTextStream> // For reading file content
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -19,5 +25,11 @@ public:
 
 private:
     Ui::MainWindow *ui;
+
+private slots:
+    void on_home_clicked();
+    void on_pickFile_clicked();
+    void on_graphPoints_clicked();
+    void on_pickPoints_clicked();
 };
 #endif // MAINWINDOW_H

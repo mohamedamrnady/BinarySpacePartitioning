@@ -19,6 +19,15 @@ std::vector<Point> readPointsFromFile(const std::string& filename);
 
 /**
  * Validate input points.
+ *
+ * @param points Points to check in
+ * @param point Point to check
+ * @return true if exists, false otherwise
+ */
+bool checkIfPointExists(const std::vector<Point> &points, Point point);
+
+/**
+ * Validate input points.
  * 
  * @param points Points to validate
  * @return true if valid, false otherwise
