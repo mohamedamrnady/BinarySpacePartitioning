@@ -1,4 +1,5 @@
 #include "bsp_visualize.h"
+#include "qcustomplot.h"
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -131,42 +132,104 @@ void visualizeASCII(BSPNode *root,
     }
 }
 
-void printPartitionLines(BSPNode *root)
+void visualizeGUI(QCustomPlot *graphPlot, BSPNode *root,
+                  const std::vector<Point> &points)
 {
-    // Should:
-    // 1. Traverse tree (pre-order or in-order)
-    // 2. For each internal node, print partition line equation
-    // 3. Format: "ax + by + c = 0" or more readable format
-    //    e.g., "x = 5.0" for vertical lines, "y = 3.0" for horizontal
+    double greatestX = 0;
+    double greatestY = 0;
+    double smallestX = 0;
+    double smallestY = 0;
 
-    // 1. Handle empty tree
-    if (root == nullptr)
-        return;
-
-    // 2. If this is an internal node, print its partition line
-    if (!root->isLeaf)
+    for (size_t i = 0; i < points.size(); ++i)
     {
-        std::cout << "Partition: "
-                  << root->a << "x + "
-                  << root->b << "y + "
-                  << root->c << " = 0";
-
-        // 3. Print a more readable form
-        if (root->a == 1.0 && root->b == 0.0)
+        if (points[i].x > greatestX)
         {
-            std::cout << " (vertical line: x = " << -root->c << ")";
+            greatestX = points[i].x;
         }
-        else if (root->a == 0.0 && root->b == 1.0)
+        if (points[i].y > greatestY)
         {
-            std::cout << " (horizontal line: y = " << -root->c << ")";
+            greatestY = points[i].y;
         }
-
-        std::cout << std::endl;
+        if (points[i].x < greatestX)
+        {
+            smallestX = points[i].x;
+        }
+        if (points[i].y < greatestY)
+        {
+            smallestY = points[i].y;
+        }
+        graphPlot->graph(0)->addData(points[i].x, points[i].y);
     }
 
-    // 4. Traverse left and right subtrees
-    printPartitionLines(root->left);
-    printPartitionLines(root->right);
+    int plotSize = greatestX > greatestY ? greatestX : greatestY;
+
+    // Helper lambdas
+    auto clampInt = [&](int v, int lo, int hi)
+    {
+        if (v < lo)
+            return lo;
+        if (v > hi)
+            return hi;
+        return v;
+    };
+
+    auto mapXToCol = [&](double x)
+    {
+        double t = (x - smallestX) / (greatestX - smallestX);
+        int col = (int)(t * (plotSize - 1) + 0.5);
+        return clampInt(col, 0, plotSize - 1);
+    };
+
+    auto mapYToRow = [&](double y)
+    {
+        double t = (y - smallestY) / (greatestY - smallestY);
+        int rowFromBottom = (int)(t * (plotSize - 1) + 0.5);
+        int row = (plotSize - 1) - rowFromBottom;
+        return clampInt(row, 0, plotSize - 1);
+    };
+
+    // 3. Draw partition lines on grid (single symbol for consistency)
+    std::vector<BSPNode *> stack;
+    stack.push_back(root);
+
+    while (!stack.empty())
+    {
+        BSPNode *node = stack.back();
+        stack.pop_back();
+
+        if (node == nullptr)
+            continue;
+
+        if (!node->isLeaf)
+        {
+            QCPItemStraightLine *infLine = new QCPItemStraightLine(graphPlot);
+            if (node->a == 1.0 && node->b == 0.0)
+            {
+                // Vertical split: x = -c
+                int col = mapXToCol(-node->c);
+                infLine->point1->setCoords(1.5 * greatestX, col);  // e.g., (2, 0)
+                infLine->point2->setCoords(-1.5 * greatestX, col); // e.g., (2, 1)
+            }
+            else if (node->a == 0.0 && node->b == 1.0)
+            {
+                // Horizontal split: y = -c
+                int row = mapYToRow(-node->c);
+                infLine->point1->setCoords(row, 1.5 * greatestY);  // e.g., (2, 0)
+                infLine->point2->setCoords(row, -1.5 * greatestY); // e.g., (2, 1)
+            }
+        }
+
+        stack.push_back(node->left);
+        stack.push_back(node->right);
+    }
+
+    qDebug() << "Replotting";
+
+    graphPlot->xAxis->setRange(-1.5 * greatestX, 1.5 * greatestX);
+    graphPlot->yAxis->setRange(-1.5 * greatestY, 1.5 * greatestY);
+    graphPlot->graph(0)->setScatterStyle(QCPScatterStyle::ssDisc);
+    graphPlot->graph(0)->setLineStyle(QCPGraph::lsNone);
+    graphPlot->replot();
 }
 
 //!!!!!!!!!!!!!!IMPORTANT!!!!!!!!!!!!!!
