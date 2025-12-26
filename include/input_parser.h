@@ -8,6 +8,7 @@
 std::vector<Point> readPointsFromFile(const std::string &filename);
 
 bool validatePoints(const std::vector<Point> &points);
+bool checkIfPointExists(const std::vector<Point> &points, Point point);
 
 std::vector<Point> generateRandomPoints(int count,
                                         double minX, double maxX,

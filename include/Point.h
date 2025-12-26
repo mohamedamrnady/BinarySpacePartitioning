@@ -10,6 +10,9 @@ struct Point
     Point(double x, double y);
 
     void print() const;
+
+    // Overload the equality operator
+    bool operator==(const Point& other) const;
 };
 
 #endif

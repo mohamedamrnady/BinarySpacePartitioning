@@ -37,7 +37,9 @@ std::vector<Point> readPointsFromFile(const std::string &filename)
         double x, y;
         if (file >> x >> y)
         {
-            points.push_back(Point(x, y));
+            if (!checkIfPointExists(points,Point(x, y))) {
+                points.push_back(Point(x, y));
+            }
         }
         else
         {
@@ -58,6 +60,19 @@ std::vector<Point> readPointsFromFile(const std::string &filename)
     }
 
     return points;
+}
+
+bool checkIfPointExists(const std::vector<Point> &points, const Point point) {
+
+    auto it = std::find(points.begin(), points.end(), point);
+
+    if (it != points.end()) {
+        std::cout << "Object found in the vector." << std::endl;
+        return true;
+    } else {
+        std::cout << "Object not found in the vector." << std::endl;
+        return false;
+    }
 }
 
 bool validatePoints(const std::vector<Point> &points)

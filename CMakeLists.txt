@@ -41,7 +41,6 @@ qt_add_executable(BSPProject
     src/mainwindow.ui
     src/qcustomplot.cpp
     include/qcustomplot.h
-    build/Qt_6_10_1_for_macOS-Debug/BSPProject_autogen/include/ui_mainwindow.h
 )
 
 target_include_directories(BSPProject PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
