@@ -33,5 +33,6 @@ private:
 private slots:
     void on_home_clicked();
     void on_pickFile_clicked();
+    void on_randomPoints_clicked();
 };
 #endif // MAINWINDOW_H

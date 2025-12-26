@@ -27,13 +27,13 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="home">
      <widget class="QPushButton" name="pickFile">
       <property name="geometry">
        <rect>
-        <x>250</x>
+        <x>40</x>
         <y>200</y>
         <width>230</width>
         <height>110</height>
@@ -41,6 +41,19 @@
       </property>
       <property name="text">
        <string>Pick Plot Points File</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="randomPoints">
+      <property name="geometry">
+       <rect>
+        <x>380</x>
+        <y>200</y>
+        <width>230</width>
+        <height>110</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Generate Random Points</string>
       </property>
      </widget>
     </widget>
