@@ -84,17 +84,17 @@ void MainWindow::on_randomPoints_clicked() {
         seedInitialized = true;
     }
 
-    int count = std::rand() % (20 - 0 + 1) + 0;
-    double minX = ((double)std::rand() / RAND_MAX) * (100.0 - 0.0);
+    int count = std::rand() % (10 - 0 + 1) + 0;
+    double minX = ((double)std::rand() / RAND_MAX) * (50.0 - 0.0);
     double maxX = 0.0;
-    double minY = ((double)std::rand() / RAND_MAX) * (100.0 - 0.0);
+    double minY = ((double)std::rand() / RAND_MAX) * (50.0 - 0.0);
     double maxY = 0.0;
 
     while (maxX <= minX) {
-        maxX = ((double)std::rand() / RAND_MAX) * (200.0 - 0.0);
+        maxX = ((double)std::rand() / RAND_MAX) * (50.0 - 0.0);
     }
     while (maxY <= minY) {
-        maxY = ((double)std::rand() / RAND_MAX) * (200.0 - 0.0);
+        maxY = ((double)std::rand() / RAND_MAX) * (50.0 - 0.0);
     }
 
     std::vector<Point> points = generateRandomPoints(count, minX, maxX, minY, maxY);

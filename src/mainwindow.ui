@@ -33,7 +33,7 @@
      <widget class="QPushButton" name="pickFile">
       <property name="geometry">
        <rect>
-        <x>40</x>
+        <x>110</x>
         <y>200</y>
         <width>230</width>
         <height>110</height>
@@ -42,11 +42,20 @@
       <property name="text">
        <string>Pick Plot Points File</string>
       </property>
+      <property name="autoDefault">
+       <bool>false</bool>
+      </property>
+      <property name="default">
+       <bool>false</bool>
+      </property>
+      <property name="flat">
+       <bool>false</bool>
+      </property>
      </widget>
      <widget class="QPushButton" name="randomPoints">
       <property name="geometry">
        <rect>
-        <x>380</x>
+        <x>450</x>
         <y>200</y>
         <width>230</width>
         <height>110</height>
@@ -71,9 +80,9 @@
      <widget class="QTextEdit" name="textEdit">
       <property name="geometry">
        <rect>
-        <x>-7</x>
+        <x>183</x>
         <y>3</y>
-        <width>751</width>
+        <width>381</width>
         <height>121</height>
        </rect>
       </property>
